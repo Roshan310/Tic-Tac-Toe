@@ -1,82 +1,88 @@
 import random
-board = [' ' for _ in range(9)]
-players = ['X', 'O']
-player = random.choice(players)
-print("Welcome to Tic-Tac-Toe Game!!")
-print('  ' + ' ----------- ')
-print(f"It's {player}'s turn ")
 
+class Board:
+    
+    def __init__(self) -> None:
+        self.board = [' ', ' ', ' ',
+                      ' ', ' ', ' ',        
+                      ' ', ' ', ' ']
 
-def print_board():
-    print(' ')
-    print(board[0] + ' | ' + board[1]  + ' | ' + board[2])
-    print('' + '-' + ' ' + '' + '-' + ' ' + '-' + ' ' + '-' + ' - ')
-    print(board[3] + ' | ' + board[4] + ' | ' + board[5])
-    print('' + '-' + ' ' + '' + '-' + ' ' +'-' + ' ' + '-' + ' - ')
-    print(board[6] + ' | ' + board[7] + ' | ' + board[8])
-    print(' ')
+    def print_board(self):
+        print()
+        print(' ' + self.board[0] + ' | ' + self.board[1] + ' | ' + self.board[2])
+        print('_________')
+        print()
+        print(' ' + self.board[3] + ' | ' + self.board[4] + ' | ' + self.board[5])
+        print('_________')
+        print()
+        print(' ' + self.board[6] + ' | ' + self.board[7] + ' | ' + self.board[8])
 
-def check_move():
-    if ' ' in board:
-        return True
-    else:
-        return False
-
-def make_move():
-    board[board_number] = player
-
-def check_win():
-    if board[0]==board[4]==board[8]=='X' or board[0]==board[1]==board[2]=='X' \
-        or board[0]==board[3]==board[6]=='X' or board[2]==board[4]==board[6]=='X' \
-        or board[1]==board[4]==board[7]=='X' or board[2]==board[5]==board[8] == 'X'\
-        or board[6]==board[7]==board[8]=='X' or board[3]==board[4]==board[5] == 'X'\
-        or board[6]==board[7]==board[8]=='O' or board[3]==board[4]==board[5] == 'O'\
-        or board[0]==board[4]==board[8]=='O' or board[0]==board[1]==board[2]=='O' \
-        or board[0]==board[3]==board[6]=='O' or board[2]==board[4]==board[6]=='O' \
-        or board[1]==board[4]==board[7]=='O' or board[2]==board[5]==board[8] == 'O':
-        return True
-    else:
-        return False
-            
-
-while True:
-    print_board()
-    board_number = int(input('Pick a number to place the move(0-8): '))
-
-    if player == 'X':
-        if check_move():
-            if board[board_number] == ' ':
-                make_move()
-                if check_win():
-                    print_board()
-                    print('X Won the match!! ')
-                    break
-                else:
-                    player = 'O'
-                    print(f"It's {player}'s turn")
-                    continue
-            else:
-                print('Already occupied! Choose again')
-                continue
+    def update_board(self, position, symbol):
+        if self.board[position-1] == ' ':
+            self.board[position-1] = symbol
+            return True
         else:
-            print("It's a tie!! ")
-            break
+            print("Position already occupied!! Choose another position ")
+            return False
 
-    if player == 'O':
-        if check_move():
-            if board[board_number] == ' ':
-                make_move()
-                if check_win():
-                    print_board()
-                    print('O won the match!! ')
-                    break
-                else:
-                    player = 'X'
-                    print(f"It's {player}'s turn")
-                    continue
-            else:
-                print("Already occupied! Choose again")
-                continue
+    def check_winner(self, symbol):
+        if (self.board[0] == symbol and self.board[1] == symbol and self.board[2] == symbol) or \
+           (self.board[3] == symbol and self.board[4] == symbol and self.board[5] == symbol) or \
+           (self.board[6] == symbol and self.board[7] == symbol and self.board[8] == symbol) or \
+           (self.board[0] == symbol and self.board[3] == symbol and self.board[6] == symbol) or \
+           (self.board[1] == symbol and self.board[4] == symbol and self.board[7] == symbol) or \
+           (self.board[2] == symbol and self.board[5] == symbol and self.board[8] == symbol) or \
+           (self.board[0] == symbol and self.board[4] == symbol and self.board[8] == symbol) or \
+           (self.board[2] == symbol and self.board[4] == symbol and self.board[6] == symbol):
+            return True
         else:
-            print("It's a tie!! ")
-            break
+            return False
+
+    def check_draw(self):
+        if ' ' not in self.board:
+            return True
+
+        else:
+            return False
+      
+class Player:
+    
+    def __init__(self, symbol) -> None:
+        self.symbol = symbol
+
+
+class Game:
+
+    def __init__(self) -> None:
+
+        self.board = Board()
+        self.player1 = Player('X')
+        self.player2 = Player('O')
+        self.current_player = random.choice([self.player1, self.player2])
+
+    def play(self):
+        
+        while True:
+            print(f"Current player: {self.current_player.symbol} ")
+            position = int(input("Enter the position: "))
+
+            if self.board.update_board(position, self.current_player.symbol):
+                self.board.print_board()
+
+                if self.board.check_winner(self.current_player.symbol):
+                    print(self.current_player.symbol + ' wins')
+                    break
+                
+                elif self.board.check_draw():
+                    print("The game is a Draw")
+                    break
+
+                else:
+                    if self.current_player == self.player1:
+                        self.current_player = self.player2
+
+                    else:
+                        self.current_player = self.player1
+
+game = Game()
+game.play()
