@@ -19,7 +19,12 @@ class Board:
         print(' ' + self.board[6] + ' | ' + self.board[7] + ' | ' + self.board[8])
 
     def update_board(self, position, symbol):
-        if self.board[position-1] == ' ':
+        """Places an X or an O onto the board, at the given position. Does not place the symbol if the position is
+        out of bounds of the board
+        """
+        if not self.position_is_valid(position, self.board):
+            print("Position is invalid!! Choose another position \n")
+        elif self.board[position-1] == ' ':
             self.board[position-1] = symbol
             return True
         else:
@@ -47,6 +52,13 @@ class Board:
 
         else:
             return False
+    
+    def position_is_valid(self, position, board):
+        """Returns True if the position is valid (i.e. is not out of bounds of the board).
+        Returns False otherwise
+        """
+        return 0 <= position < len(board)
+
       
 class Player:
     """Represents a player, with a symbol (typically an X or an O), that will be placed on the board"""
