@@ -1,13 +1,14 @@
 import random
 
 class Board:
-    
+    """Represents the Tic-tac-toe game board"""
     def __init__(self) -> None:
         self.board = [' ', ' ', ' ',
                       ' ', ' ', ' ',        
                       ' ', ' ', ' ']
 
     def print_board(self):
+        """Prints the game board"""
         print()
         print(' ' + self.board[0] + ' | ' + self.board[1] + ' | ' + self.board[2])
         print('_________')
@@ -18,7 +19,12 @@ class Board:
         print(' ' + self.board[6] + ' | ' + self.board[7] + ' | ' + self.board[8])
 
     def update_board(self, position, symbol):
-        if self.board[position-1] == ' ':
+        """Places an X or an O onto the board, at the given position. Does not place the symbol if the position is
+        out of bounds of the board
+        """
+        if not self.position_is_valid(position, self.board):
+            print("Position is invalid!! Choose another position \n")
+        elif self.board[position-1] == ' ':
             self.board[position-1] = symbol
             return True
         else:
@@ -26,6 +32,7 @@ class Board:
             return False
 
     def check_winner(self, symbol):
+        """Returns True if a player has won the game. Returns False otherwise"""
         if (self.board[0] == symbol and self.board[1] == symbol and self.board[2] == symbol) or \
            (self.board[3] == symbol and self.board[4] == symbol and self.board[5] == symbol) or \
            (self.board[6] == symbol and self.board[7] == symbol and self.board[8] == symbol) or \
@@ -39,20 +46,28 @@ class Board:
             return False
 
     def check_draw(self):
+        """Returns True if the game has been drawn. Returns False otherwise"""
         if ' ' not in self.board:
             return True
 
         else:
             return False
+    
+    def position_is_valid(self, position, board):
+        """Returns True if the position is valid (i.e. is not out of bounds of the board).
+        Returns False otherwise
+        """
+        return 0 <= position < len(board)
+
       
 class Player:
-    
+    """Represents a player, with a symbol (typically an X or an O), that will be placed on the board"""
     def __init__(self, symbol) -> None:
         self.symbol = symbol
 
 
 class Game:
-
+    """Represents a game of Tic-tac-toe"""
     def __init__(self) -> None:
 
         self.board = Board()
@@ -61,7 +76,9 @@ class Game:
         self.current_player = random.choice([self.player1, self.player2])
 
     def play(self):
-        
+        """Initiates a single game of Tic-tac-toe"""
+        self.board.print_board() # print the empty board at the beginning
+
         while True:
             print(f"Current player: {self.current_player.symbol} ")
             position = int(input("Enter the position: "))
