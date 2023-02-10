@@ -57,7 +57,7 @@ class Board:
         """Returns True if the position is valid (i.e. is not out of bounds of the board).
         Returns False otherwise
         """
-        return 0 <= position < len(board)
+        return 0 < position <= len(board)
 
       
 class Player:
