@@ -77,6 +77,8 @@ class Game:
 
     def play(self):
         """Initiates a single game of Tic-tac-toe"""
+        self.board.print_board() # print the empty board at the beginning
+
         while True:
             print(f"Current player: {self.current_player.symbol} ")
             position = int(input("Enter the position: "))
